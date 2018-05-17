@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFaceRedact", "MediaFaceRedact\MediaFaceRedact.csproj", "{0C06B7C0-7423-445D-B4D0-619CCCF3F265}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C06B7C0-7423-445D-B4D0-619CCCF3F265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C06B7C0-7423-445D-B4D0-619CCCF3F265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C06B7C0-7423-445D-B4D0-619CCCF3F265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C06B7C0-7423-445D-B4D0-619CCCF3F265}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\TransientFaultHandling.Core.5.1.1209.1\lib\NET4
+		SolutionGuid = {CCFBE34E-A855-417E-9C64-82774968B9E2}
+	EndGlobalSection
+EndGlobal
