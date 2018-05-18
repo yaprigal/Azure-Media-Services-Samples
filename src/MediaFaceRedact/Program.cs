@@ -26,7 +26,7 @@ namespace FaceRedaction
 
         //Arguments usage: [redact/detect] [existing uid/new video file name]
         static void Main(string[] args)
-        {
+        {            
             if (args.Length == 2)
             {
                 AzureAdTokenCredentials tokenCredentials =
@@ -37,7 +37,10 @@ namespace FaceRedaction
                 var tokenProvider = new AzureAdTokenProvider(tokenCredentials);
 
                 _context = new CloudMediaContext(new Uri(_RESTAPIEndpoint), tokenProvider);
-                Guid jobuid = Guid.NewGuid();
+                //IAsset asset = GetAsset("nb:cid:UUID:4004430c-d597-4806-a37a-54894907b431");
+                //EncodeToAdaptiveBitrateMP4Set(asset);
+
+                Guid jobuid = Guid.NewGuid();                
                 IAsset result = null;
 
                 if (args[0] == "redact")
@@ -77,6 +80,38 @@ namespace FaceRedaction
                 Console.WriteLine("Invalid Usage: MediaFaceRedact.exe [redact/detect] [existing uid/new video file name]");
             }
         }
+
+        static public IAsset EncodeToAdaptiveBitrateMP4Set(IAsset asset)
+        {
+            Guid newjob = Guid.NewGuid();
+            // Declare a new job.
+            IJob job = _context.Jobs.Create("Media Encoder Standard Job " + newjob);
+            // Get a media processor reference, and pass to it the name of the 
+            // processor to use for the specific task.
+            IMediaProcessor processor = GetLatestMediaProcessorByName("Media Encoder Standard");
+
+            // Create a task with the encoding details, using a string preset.
+            // In this case "Adaptive Streaming" preset is used.
+            ITask task = job.Tasks.AddNew("My encoding task " + newjob,
+                processor, "H264 Single Bitrate 1080p",
+                //"Adaptive Streaming",
+                TaskOptions.None);
+
+            // Specify the input asset to be encoded.
+            task.InputAssets.Add(asset);
+            // Add an output asset to contain the results of the job. 
+            // This output is specified as AssetCreationOptions.None, which 
+            // means the output asset is not encrypted. 
+            task.OutputAssets.AddNew("Output asset " + newjob,
+                AssetCreationOptions.None);
+
+            job.StateChanged += new EventHandler<JobStateChangedEventArgs>(StateChanged);
+            job.Submit();
+            job.GetExecutionProgressTask(CancellationToken.None).Wait();
+
+            return job.OutputMediaAssets[0];
+        }
+        
 
         static void PrintAssets()
         {
@@ -186,10 +221,12 @@ namespace FaceRedaction
 
         static IAsset RunFaceRedactionJobFromNewAsset(Guid jobuid, string inputMediaFilePath, string configurationFile)
         {
+            Console.WriteLine(DateTime.Now);
             // Create an asset and upload the input media file to storage.
             IAsset asset = CreateAssetAndUploadSingleFile(inputMediaFilePath,
                 "My Face Redaction Input Asset " + inputMediaFilePath,
                 AssetCreationOptions.None);
+            Console.WriteLine(DateTime.Now);
             return RunFaceRedactionJob(jobuid, asset, configurationFile);
         }
 
